@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import withRenderTracker from './HOC/withRenderTracker.jsx'
 import ItemList from './Components/ItemList.jsx'
 import SearchInput from './Components/SearchInput.jsx'
@@ -9,23 +9,18 @@ const WrapCounterButton = withRenderTracker(CounterButton)
 const WrapSearchInput = withRenderTracker(SearchInput)
 const WrapItemList = withRenderTracker(ItemList)
 
+const generateList = () => {
+    let elements = []
+    for (let i = 0; i < 120; i++) {
+        elements.push({ id: i, title: 'Element ' + i })
+    }
+    return elements
+}
+
 function App() {
-    const [listElements, setListElements] = useState([])
     const [searchElement, setSearchElement] = useState('')
     const [count, setCount] = useState(1)
-
-    const generateList = () => {
-        let elements = []
-        for (let i = 0; i < 120; i++) {
-            elements.push({ id: i, title: 'Element ' + i })
-        }
-        return elements
-    }
-
-    useEffect(() => {
-        const items = generateList()
-        setListElements(items)
-    }, [])
+    const [listElements, setListElements] = useState(generateList)
 
     const changeInputSearch = useCallback((value) => {
         setSearchElement(value)
