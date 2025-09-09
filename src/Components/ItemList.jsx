@@ -1,12 +1,6 @@
-import { memo, useMemo } from 'react'
+import { memo } from 'react'
 
-const ItemList = ({ list, searchElement }) => {
-    const filteredList = useMemo(() => {
-        return list.filter((item) =>
-            item.title.toLowerCase().includes(searchElement.toLowerCase())
-        )
-    }, [list, searchElement])
-
+const ItemList = ({ filteredList }) => {
     return (
         <ol>
             {filteredList.map((item) => (

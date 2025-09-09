@@ -1,8 +1,13 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import withRenderTracker from './HOC/withRenderTracker.jsx'
 import ItemList from './Components/ItemList.jsx'
 import SearchInput from './Components/SearchInput.jsx'
 import CounterButton from './Components/CounterButton.jsx'
 import './App.css'
+
+const WrapCounterButton = withRenderTracker(CounterButton)
+const WrapSearchInput = withRenderTracker(SearchInput)
+const WrapItemList = withRenderTracker(ItemList)
 
 function App() {
     const [listElements, setListElements] = useState([])
@@ -30,16 +35,22 @@ function App() {
         setCount((count) => count + 1)
     }, [])
 
+    const filteredList = useMemo(() => {
+        return listElements.filter((item) =>
+            item.title.toLowerCase().includes(searchElement.toLowerCase())
+        )
+    }, [listElements, searchElement])
+
     return (
         <>
             <div className="header">
-                <CounterButton count={count} onIncrement={increment} />
-                <SearchInput
+                <WrapCounterButton count={count} onIncrement={increment} />
+                <WrapSearchInput
                     value={searchElement}
                     onChangeInputSearch={changeInputSearch}
                 />
             </div>
-            <ItemList list={listElements} searchElement={searchElement} />
+            <WrapItemList filteredList={filteredList} />
         </>
     )
 }
